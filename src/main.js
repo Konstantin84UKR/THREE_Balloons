@@ -75,6 +75,7 @@ export default class Sketch {
     const far = 1000;
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     this.camera.position.z = 50;
+    this.camera.position.y = 10;
 
     this.controls = new OrbitControls(this.camera, this.canvas);
     this.controls.enableDamping = true;
@@ -164,40 +165,49 @@ export default class Sketch {
 
   initEvents() {
 
-    window.addEventListener("keydown", (event) => {
-      console.log('keydown! ' + event.key)
-      if (event.key === 'ArrowLeft') {
+    window.addEventListener("keydown", this.keyEvent.bind(this));
+    
+    const arrows = document.querySelectorAll(".arrow");
+  
+    arrows.forEach(arrow => {
+      arrow.addEventListener("click", this.keyEvent.bind(this));
+    });
+
+  }
+
+  keyEvent(event){
+    //console.log('keydown! ' + event.key)
+    const accessKey = event.target.accessKey;    
+    //console.log('accessKey! ' + accessKey)
+
+
+      if (event.key === 'ArrowLeft' || accessKey === 'ArrowLeft') {
         this.balloonArray.map(b => {
           b.arrayBodys[0].bodySphere.position.x -= 0.5
         })
 
       }
-      if (event.key === 'ArrowRight') {
+      if (event.key === 'ArrowRight' || accessKey === 'ArrowRight') {
 
         this.balloonArray.map(b => {
           b.arrayBodys[0].bodySphere.position.x += 0.5
         })
       }
-      if (event.key === 'ArrowUp') {
-        const impulsePoint = new CANNON.Vec3(0.0, 0.0, 0)
-        const impulse = new CANNON.Vec3(-1000 * 1 / 60, 0, 0)
+      if (event.key === 'ArrowUp' || accessKey === 'ArrowUp' ) {     
 
         this.balloonArray.map(b => {
           b.arrayBodys[0].bodySphere.position.z -= 0.5
         })
 
       }
-      if (event.key === 'ArrowDown') {
-        const impulsePoint = new CANNON.Vec3(0.0, 0.0, 0)
-        const impulse = new CANNON.Vec3(-1000 * 1 / 60, 0, 0)
-
-        this.balloonArray.map(b => {
+      if (event.key === 'ArrowDown'|| accessKey === 'ArrowDown' ) {
+      
+          this.balloonArray.map(b => {
           b.arrayBodys[0].bodySphere.position.z += 0.5
         })
 
       }
       // do something
-    });
   }
 
   addBalloons() {

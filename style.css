@@ -6,6 +6,7 @@ body {
   height: 100vh;
   width: 100vw;
   background: #222222;
+  position: relative; 
 }
 
 #container {
@@ -15,4 +16,34 @@ body {
   transform: translate(-50%, -50%);
   width: 100vw;
   height: 100vh;
+}
+
+.keyboard-arrows {
+  position: absolute; /* абсолютное позиционирование */
+  bottom: 5%; /* прижимаем к нижнему краю экрана */
+  left: 50%; /* позиция по горизонтали */
+  transform: translateX(-50%); /* сдвиг влево на 50% от ширины элемента */
+
+  /* position: relative; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;  
+  
+}
+
+.arrow {
+  font-size: 24px;
+  width: 60px; /* ширина кнопки */
+  height: 60px; /* высота кнопки */
+  margin: 5px;
+  border: none;
+  background-color: #f0f0f0;
+  color: #333;
+  cursor: pointer;
+  z-index: 2;
+}
+
+button:hover {
+  background-color: #ccc;
 }
