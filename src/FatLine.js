@@ -22,8 +22,16 @@ export class FatLine {
         await this.initDataTexture(chains);
 
 
-        const fatLine_geometry = new THREE.CylinderGeometry(0.025, 0.1, 10, 6, this.sizeUVx, true);
-        const fatLine_Material = new THREE.MeshNormalMaterial({ side: THREE.FrontSide });
+        const fatLine_geometry = new THREE.CylinderGeometry(0.02, 0.03, 10, 6, this.sizeUVx, true);
+        //const fatLine_Material = new THREE.MeshNormalMaterial({ side: THREE.FrontSide });
+        const fatLine_Material = new THREE.MeshStandardMaterial({
+            color: 0xdddddd,
+            envMap: this.scene.environment,
+            envMapIntensity: 1.0          
+          })
+          
+          fatLine_Material.depthTest = true;
+          fatLine_Material.roughness = 0.8;
         //fatLine_Material.wireframe = true;
 
         fatLine_Material.uniforms = {
@@ -67,6 +75,9 @@ export class FatLine {
 
         }
         this.fatLine = new THREE.InstancedMesh(fatLine_geometry, fatLine_Material, FATLINE_COUNT);
+        this.fatLine.castShadow = true; //default is false
+        this.fatLine.receiveShadow = true; //default 
+     
         this.scene.add(this.fatLine);
     }
 

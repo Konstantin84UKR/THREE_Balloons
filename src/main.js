@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import * as CANNON from 'cannon-es'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { Balloon } from './Balloon.js'
 import { FatLine } from './FatLine.js'
 
@@ -19,6 +20,11 @@ export default class Sketch {
     });
 
     this.renderer.setSize(this.width, this.height);
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    this.renderer.toneMappingExposure = 1.0;
+
 
     this.clock = new THREE.Clock();
     this.timeStep = 1 / 60;
@@ -29,8 +35,10 @@ export default class Sketch {
 
     this.camera = null;
 
-    this.balloonCount = 20;
+    this.balloonCount = 25;
     this.chainSize = 9;
+
+    this.loader = new RGBELoader;
 
     this.init();
     this.addObject();
@@ -65,6 +73,8 @@ export default class Sketch {
     this.initHelpers();
     this.initPhysics();
     this.initEvents();
+    this.initLights();
+    this.addModels();
   }
 
   initCamera() {
@@ -82,8 +92,8 @@ export default class Sketch {
   }
 
   initHelpers() {
-    const gridHelper = new THREE.GridHelper(20, 20);
-    this.scene.add(gridHelper);
+    // const gridHelper = new THREE.GridHelper(20, 20);
+    // this.scene.add(gridHelper);
   }
 
   addObject() {
@@ -118,7 +128,7 @@ export default class Sketch {
 
     this.world.broadphase = new CANNON.NaiveBroadphase();
     this.world.gravity.set(0, -9.8, 0);
-    this.world.allowSleep = true;
+    //this.world.allowSleep = true;
 
 
 
@@ -136,11 +146,11 @@ export default class Sketch {
     this.body = new CANNON.Body({ mass: 1, material: material });
     this.body.position = new CANNON.Vec3(5.0, 0.5, 8.0)
     this.body.addShape(physics_box);
-    this.body.allowSleep = true;
+    //this.body.allowSleep = true;
     this.world.addBody(this.body);
 
-    this.body.sleepSpeedLimit = 0.1
-    this.body.sleepTimeLimit = 1
+    // this.body.sleepSpeedLimit = 0.1
+    // this.body.sleepTimeLimit = 1
     this.body.angularDamping = 0.5;
 
 
@@ -172,6 +182,52 @@ export default class Sketch {
     arrows.forEach(arrow => {
       arrow.addEventListener("click", this.keyEvent.bind(this));
     });
+
+  }
+  
+  initLights(){
+   
+    const scene = this.scene;
+
+    //this.loader.setPath('../src/assets/textures/hdri/').load('basic.hdr', function (texture) {
+    this.loader.setPath('./static/assets/textures/hdri/').load('basic.hdr', function (texture) {
+
+
+
+        console.log(texture)
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+  
+        scene.background = texture;
+        //scene.background = new THREE.Color( 0x33322c );
+        scene.environment = texture;
+        
+      });
+
+    // White directional light at half intensity shining from the top.
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    directionalLight.position.set(0, 20, 20);
+    directionalLight.castShadow = true;
+
+    this.scene.add(directionalLight);
+
+    //Set up shadow properties for the light
+    directionalLight.shadow.mapSize.width = 128; // 512 default
+    directionalLight.shadow.mapSize.height = 128; //512 default
+    directionalLight.shadow.bias = - 0.0001;
+
+    // Настройка камеры теней
+    const shadowCamera = directionalLight.shadow.camera;
+    shadowCamera.left = -15; // Левая граница области
+    shadowCamera.right = 15; // Правая граница области
+    shadowCamera.top = 15; // Верхняя граница области
+    shadowCamera.bottom = -15; // Нижняя граница области
+    shadowCamera.near = 0.5; // Ближняя плоскость отсечения
+    shadowCamera.far = 40; // Дальняя плоскость отсечения
+
+    // const dirLightHelper = new THREE.DirectionalLightHelper(directionalLight, 10);
+    // this.scene.add(dirLightHelper);
+
+    // this.scene.add(new THREE.CameraHelper(directionalLight.shadow.camera));
 
   }
 
@@ -222,13 +278,30 @@ export default class Sketch {
           scene: this.scene,
           chainSize: this.chainSize,
           chainDist: 0.5 * Math.random() + 0.4, // расстояние между звеньями цепи
-          balloonRadius: 1,
+          balloonRadius: 1.1,
           balloonGravity: new CANNON.Vec3(0, 350, 0),
           rootPosition: new CANNON.Vec3(0, 0, 0)
         });
 
       this.balloonArray.push(balloon);
     }
+
+  }
+
+  addModels(){
+    
+    const geometryPlane = new THREE.PlaneGeometry(25, 25, 25)
+    geometryPlane.rotateX(Math.PI * -0.5)
+    const materialPlane = new THREE.MeshStandardMaterial({
+        color: 0x667777, //FFE4C4
+        envMap: this.scene.environment,
+        envMapIntensity: 1.0})
+    materialPlane.depthTest = true;    
+
+    const plane = new THREE.Mesh(geometryPlane, materialPlane)
+    plane.castShadow = true; //default is false
+    plane.receiveShadow = true; //default 
+    this.scene.add(plane)
 
   }
 

@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "cannon-es": "^0.20.0",
-    "three": "^0.159.0",
+    "three": "^0.161.0",
     "tweakpane": "^4.0.2"
   }
 }

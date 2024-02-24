@@ -18,30 +18,37 @@ body {
   height: 100vh;
 }
 
-.keyboard-arrows {
-  position: absolute; /* абсолютное позиционирование */
-  bottom: 5%; /* прижимаем к нижнему краю экрана */
-  left: 50%; /* позиция по горизонтали */
-  transform: translateX(-50%); /* сдвиг влево на 50% от ширины элемента */
 
-  /* position: relative; */
+.keyboard-arrows {
+  /* background-color: brown; */
+  position: fixed;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 1;  
-  
+  z-index: 1; 
+}
+
+.keyboard-arrows > div {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .arrow {
   font-size: 24px;
-  width: 60px; /* ширина кнопки */
-  height: 60px; /* высота кнопки */
+  width: 60px;
+  height: 60px;
   margin: 5px;
   border: none;
   background-color: #f0f0f0;
   color: #333;
   cursor: pointer;
   z-index: 2;
+  border-radius: 5%;
 }
 
 button:hover {

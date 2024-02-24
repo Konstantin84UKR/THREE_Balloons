@@ -1,7 +1,7 @@
 import * as CANNON from 'cannon-es'
 import * as THREE from 'three'
 import { GLTFLoader as THREE_GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import balloonGLB from '../models/balloon.glb?url';
+import balloonGLB from '../static/assets/models/balloon.glb?url';
 
 export class Balloon {
 
@@ -103,7 +103,7 @@ export class Balloon {
 
     this.world.addBody(this.balloonBody);
 
-    const distanceConstraint = new CANNON.DistanceConstraint(this.balloonBody, this.previous, this.balloonRadius * 2);
+    const distanceConstraint = new CANNON.DistanceConstraint(this.balloonBody, this.previous, this.balloonRadius * 1);
     this.world.addConstraint(distanceConstraint);
   }
 
@@ -118,7 +118,7 @@ export class Balloon {
       let sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
       this.arrayBodys[i].sphere = sphere;
-      this.scene.add(sphere);
+     // this.scene.add(sphere);
 
     };
 
@@ -137,24 +137,46 @@ export class Balloon {
     });
 
     this.curve.mesh = new THREE.Line(geometry.clone(), materialRope);
-    this.scene.add(this.curve.mesh);
+    //this.scene.add(this.curve.mesh);
 
   };
 
   async initVisualBalloon() {
 
-    const sphereGeometry = new THREE.CylinderGeometry(3.0, 1.0, 3.0, 18.0);
-    sphereGeometry.rotateX(Math.PI * 0.5)
-    sphereGeometry.translate(0, 0, -1.5);
+    // const sphereGeometry = new THREE.CylinderGeometry(3.0, 1.0, 3.0, 18.0);
+    // sphereGeometry.rotateX(Math.PI * 0.5)
+    // sphereGeometry.translate(0, 0, -1.5);
 
 
     const gltf = await this.loader.loadAsync(balloonGLB);
     const balloonGeometry = gltf.scene.children[0].geometry;
     balloonGeometry.rotateX(Math.PI * 0.5)
 
-    const sphereMaterial = new THREE.MeshNormalMaterial();
+    //const sphereMaterial = new THREE.MeshNormalMaterial();
+
+    const colorsForBalioon = [
+      0x0088ff,
+      0xff0000,
+      0xff00ff,
+      0x00ff00,
+      0xffff00,
+    ]
+    const indexColor = Math.floor(Math.random() * 5)
+
+
+    const sphereMaterial = new THREE.MeshStandardMaterial({
+          color: colorsForBalioon[indexColor], 
+          envMap: this.scene.environment,
+          envMapIntensity: 0.5          
+        })
+        
+    sphereMaterial.depthTest = true;
+    sphereMaterial.roughness = 0.2;
+
     this.sphereBalloon = new THREE.Mesh(balloonGeometry, sphereMaterial);
     this.sphereBalloon.matrixAutoUpdate = false;
+    this.sphereBalloon.castShadow = true; //default is false
+    this.sphereBalloon.receiveShadow = true; //default 
 
     this.scene.add(this.sphereBalloon);
   }
