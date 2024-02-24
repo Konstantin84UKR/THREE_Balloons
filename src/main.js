@@ -186,6 +186,8 @@ export default class Sketch {
           b.arrayBodys[0].bodySphere.position.x -= 0.5
         })
 
+       // console.log('ArrowLeft!')
+
       }
       if (event.key === 'ArrowRight' || accessKey === 'ArrowRight') {
 
