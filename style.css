@@ -7,6 +7,7 @@ body {
   width: 100vw;
   background: #222222;
   position: relative; 
+  overflow: hidden;
 }
 
 #container {
@@ -44,7 +45,7 @@ body {
   font-size: 24px;
   width: 100px;
   height: 100px;
-  margin: 5px;
+  margin: 2px;
   border: none;
   background-color: #f0f0f0;
   color: #333;
@@ -52,6 +53,7 @@ body {
   z-index: 2;
   border-radius: 5%;
   touch-action: manipulation;
+  opacity: 0.3
 }
 
 button:hover {
@@ -78,5 +80,20 @@ button:hover {
   height: 48px;
   z-index: 3;
   position: relative; 
+
+}
+
+.btnBalloons {
+  
+  margin-right: 10px ;  
+  margin-left: 10px ; 
+  margin-top: 10px ; 
+  margin-bottom: 10px ; 
+  
+  width: 48px;
+  height: 48px;
+  z-index: 3;
+  position: relative; 
+  opacity: 0.3
 
 }

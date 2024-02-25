@@ -110,7 +110,7 @@ export class Balloon {
   async initVisualChain() {
 
     let radius = this.chainRadius;
-    const sphereGeometry = new THREE.SphereGeometry(radius, 16, 8);
+    const sphereGeometry = new THREE.SphereGeometry(radius * 3, 16, 8);
     const sphereMaterial = new THREE.MeshNormalMaterial();
 
     for (let i = 0; i <= this.chainSize; i++) {
@@ -118,7 +118,7 @@ export class Balloon {
       let sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
       this.arrayBodys[i].sphere = sphere;
-     // this.scene.add(sphere);
+      //this.scene.add(sphere);
 
     };
 
@@ -164,14 +164,20 @@ export class Balloon {
     const indexColor = Math.floor(Math.random() * 5)
 
 
-    const sphereMaterial = new THREE.MeshStandardMaterial({
-          color: colorsForBalioon[indexColor], 
+    const sphereMaterial = new THREE.MeshPhysicalMaterial({
+           color: colorsForBalioon[indexColor], 
           envMap: this.scene.environment,
-          envMapIntensity: 0.5          
+          envMapIntensity: 0.5 ,
+          transmission: 0.2,
+          ior : 1.5,
+          sheen : 1.0,
+          thickness : 0.1          
         })
         
     sphereMaterial.depthTest = true;
     sphereMaterial.roughness = 0.2;
+    // sphereMaterial.transparent = true;
+    // sphereMaterial.opacity = 0.95;
 
     this.sphereBalloon = new THREE.Mesh(balloonGeometry, sphereMaterial);
     this.sphereBalloon.matrixAutoUpdate = false;

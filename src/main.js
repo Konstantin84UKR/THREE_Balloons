@@ -35,7 +35,7 @@ export default class Sketch {
 
     this.camera = null;
 
-    this.balloonCount = 25;
+    this.balloonCount = 35;
     this.chainSize = 9;
 
     this.loader = new RGBELoader;
@@ -140,6 +140,14 @@ export default class Sketch {
     groundBody.addShape(groundShape);
     this.world.addBody(groundBody);
 
+    const roofShape = new CANNON.Plane();
+    const roofMaterial = new CANNON.Material();
+    const roofBody = new CANNON.Body({ mass: 0, material: roofMaterial, type: CANNON.Body.STATIC, });
+    roofBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
+    //roofBody.position = new CANNON.Vec3(0.0, 3.0, 0.0)
+    roofBody.addShape(roofShape);
+    this.world.addBody(roofBody);
+
     //--------------------------------------
     const material = new CANNON.Material();
     const physics_box = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5));
@@ -181,6 +189,11 @@ export default class Sketch {
   
     arrows.forEach(arrow => {
       arrow.addEventListener("click", this.keyEvent.bind(this));
+    });
+
+    const btnBalloons = document.querySelectorAll(".btnBalloons");
+    btnBalloons.forEach(btn => {
+      btn.addEventListener("click", this.keyEvent.bind(this));
     });
 
   }
@@ -256,13 +269,48 @@ export default class Sketch {
         })
 
       }
+      
       if (event.key === 'ArrowDown'|| accessKey === 'ArrowDown' ) {
       
           this.balloonArray.map(b => {
           b.arrayBodys[0].bodySphere.position.z += 0.5
         })
-
+      
       }
+      
+      if (accessKey === 'plus' ) {
+      
+        for (var i = 0; i < this.balloonArray.length; i++) {
+          // if (this.balloonArray[i].arrayBodys[0].bodySphere.invMass === 1 && 
+          //   this.balloonArray[i].balloonGravity.y > 0) {
+          //   this.balloonArray[i].balloonGravity = new CANNON.Vec3(0, 0, 0);
+          //   break; 
+          // }  
+          
+          if (this.balloonArray[i].arrayBodys[0].bodySphere.invMass === 1 && 
+            this.balloonArray[i].balloonGravity.y <= 0 &&
+            this.balloonArray[i].balloonBody.position.y <= 5 ) {
+            
+            this.balloonArray[i].balloonGravity = new CANNON.Vec3(0, 350, 0);
+            break; 
+          }  
+        }   
+      
+      } 
+      
+      if (accessKey === 'minus' ) {            
+
+        for (var i = 0; i < this.balloonArray.length; i++) {
+          if (this.balloonArray[i].arrayBodys[0].bodySphere.invMass === 0) {
+            this.balloonArray[i].arrayBodys[0].bodySphere.invMass = 1;
+            this.balloonArray[i].arrayBodys[0].bodySphere.mass = 1;
+            this.balloonArray[i].arrayBodys[0].bodySphere.invMassSolve = 1;
+            this.balloonArray[i].arrayBodys[0].bodySphere.type = 1;
+              break; 
+          }        
+        }   
+      
+      }       
       // do something
   }
 
@@ -293,12 +341,16 @@ export default class Sketch {
     const materialPlane = new THREE.MeshStandardMaterial({
         color: 0x667777, //FFE4C4
         envMap: this.scene.environment,
-        envMapIntensity: 1.0})
+        envMapIntensity: 1.0
+      })
     materialPlane.depthTest = true;    
 
     const plane = new THREE.Mesh(geometryPlane, materialPlane)
-    plane.castShadow = true; //default is false
+    //plane.castShadow = true; //default is false
     plane.receiveShadow = true; //default 
+    plane.transparent = true;
+    plane.opacity = 0.9;
+
     this.scene.add(plane)
 
   }
@@ -355,6 +407,10 @@ export default class Sketch {
 
 
         if (balloon.sphereBalloon) {
+
+          if( balloon.balloonBody.position.y > 100) {
+            balloon.balloonGravity = new CANNON.Vec3(0, 0, 0);
+          }
 
           balloon.balloonBody.applyForce(balloon.balloonGravity);
           balloon.sphereBalloon.position.copy(balloon.balloonBody.position);
