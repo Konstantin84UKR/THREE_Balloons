@@ -20,7 +20,7 @@ body {
 
 
 .keyboard-arrows {
-  /* background-color: brown; */
+  /* background-color: brown;  */
   position: fixed;
   bottom: 5%;
   left: 50%;
@@ -29,6 +29,8 @@ body {
   flex-direction: column;
   align-items: center;
   z-index: 1; 
+  touch-action: manipulation;
+  width: min(95%, 300px);
 }
 
 .keyboard-arrows > div {
@@ -40,8 +42,8 @@ body {
 
 .arrow {
   font-size: 24px;
-  width: 60px;
-  height: 60px;
+  width: 100px;
+  height: 100px;
   margin: 5px;
   border: none;
   background-color: #f0f0f0;
@@ -49,8 +51,32 @@ body {
   cursor: pointer;
   z-index: 2;
   border-radius: 5%;
+  touch-action: manipulation;
 }
 
 button:hover {
   background-color: #ccc;
+}
+
+#container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
+  height: 100vh;
+}
+
+#portfolio {
+  
+  margin-right: 10px ;  
+  margin-left: 10px ; 
+  margin-top: 10px ; 
+  margin-bottom: 10px ; 
+  
+  width: 48px;
+  height: 48px;
+  z-index: 3;
+  position: relative; 
+
 }

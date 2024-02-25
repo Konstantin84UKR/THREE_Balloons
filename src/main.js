@@ -190,9 +190,7 @@ export default class Sketch {
     const scene = this.scene;
 
     //this.loader.setPath('../src/assets/textures/hdri/').load('basic.hdr', function (texture) {
-    this.loader.setPath('./static/assets/textures/hdri/').load('basic.hdr', function (texture) {
-
-
+    this.loader.setPath('/static/assets/textures/hdri/').load('basic.hdr', function (texture) {
 
         console.log(texture)
         texture.mapping = THREE.EquirectangularReflectionMapping;
