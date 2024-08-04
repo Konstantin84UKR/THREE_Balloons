@@ -85,7 +85,7 @@ export default class Sketch {
     const far = 1000;
     this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     this.camera.position.z = 50;
-    this.camera.position.y = 10;
+    this.camera.position.y = 5;
 
     this.controls = new OrbitControls(this.camera, this.canvas);
     this.controls.enableDamping = true;
@@ -173,10 +173,10 @@ export default class Sketch {
 
 
     //--------------------------------------
-    this.groundMaterial = groundMaterial;
-    const material_ground = new CANNON.ContactMaterial(this.groundMaterial, material,
-      { friction: 0.1, restitution: 0.1 });
-    this.world.addContactMaterial(material_ground);
+    this.world.groundMaterial = groundBody.material;
+    // this.groundMaterial = groundBody.material;
+    // const material_ground = new CANNON.ContactMaterial(this.groundMaterial, material,{ friction: 0.0, restitution: 0.0 });
+    //this.world.addContactMaterial(material_ground);
 
 
   }
@@ -291,7 +291,7 @@ export default class Sketch {
             this.balloonArray[i].balloonGravity.y <= 0 &&
             this.balloonArray[i].balloonBody.position.y <= 5 ) {
             
-            this.balloonArray[i].balloonGravity = new CANNON.Vec3(0, 350, 0);
+            this.balloonArray[i].balloonGravity = new CANNON.Vec3(0, 50, 0);
             break; 
           }  
         }   
@@ -325,7 +325,7 @@ export default class Sketch {
           chainSize: this.chainSize,
           chainDist: 0.5 * Math.random() + 0.4, // расстояние между звеньями цепи
           balloonRadius: 1.1,
-          balloonGravity: new CANNON.Vec3(0, 350, 0),
+          balloonGravity: new CANNON.Vec3(0, 50, 0),
           rootPosition: new CANNON.Vec3(0, 0, 0)
         });
 

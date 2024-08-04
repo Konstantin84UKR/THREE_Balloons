@@ -52,7 +52,7 @@ export class Balloon {
     for (let i = 0; i <= this.chainSize; i++) {
 
       let dist = this.chainDist;
-      let mass = 1;
+      let mass = 0.2;
       let position = new CANNON.Vec3(0, dist * (5 - i), 0);
 
       if (i == 0) { // is root
@@ -90,7 +90,8 @@ export class Balloon {
   async initPhysicsBalloon() {
     const sphereShape = new CANNON.Sphere(this.balloonRadius);
     this.balloonBody = new CANNON.Body({
-      mass: this.balloonRadius,
+      //mass: this.balloonRadius ,
+      mass: 0.3 ,
       material: this.material,
       shape: sphereShape
     });
@@ -105,6 +106,9 @@ export class Balloon {
 
     const distanceConstraint = new CANNON.DistanceConstraint(this.balloonBody, this.previous, this.balloonRadius * 1);
     this.world.addConstraint(distanceConstraint);
+   
+    const material_ground = new CANNON.ContactMaterial(this.balloonBody.material, this.world.groundMaterial,{ friction: 0.1, restitution: 0.9 });
+    this.world.addContactMaterial(material_ground);
   }
 
   async initVisualChain() {

@@ -56,8 +56,15 @@ body {
   opacity: 0.3
 }
 
-button:hover {
-  background-color: #ccc;
+@media (hover:hover) {
+  button:hover {
+   background-color: #ccc;
+  }
+}
+@media (hover: none) {
+  button:active {
+   background-color: #ccc;
+  }
 }
 
 #container {
