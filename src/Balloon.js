@@ -90,8 +90,7 @@ export class Balloon {
   async initPhysicsBalloon() {
     const sphereShape = new CANNON.Sphere(this.balloonRadius);
     this.balloonBody = new CANNON.Body({
-      //mass: this.balloonRadius ,
-      mass: 0.3 ,
+      mass: this.balloonRadius ,
       material: this.material,
       shape: sphereShape
     });
