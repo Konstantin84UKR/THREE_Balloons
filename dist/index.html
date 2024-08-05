@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Balloons</title>
+  <script type="module" crossorigin src="./assets/index-WOVUzatA.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-r34FAKj9.css">
+</head>
+
+<body>
+
+  <div class="keyboard-arrows">
+    <div>
+      <button class="arrow" accesskey="plus">&#8624;</button>
+      <button class="arrow" accesskey="ArrowUp">&#9650;</button>
+      <button class="arrow" accesskey="minus">&#8625;</button>
+    </div>
+    <div>
+      <button class="arrow" accesskey="ArrowLeft">&#9664;</button>
+      <button class="arrow" accesskey="ArrowDown">&#9660;</button>
+      <button class="arrow" accesskey="ArrowRight">&#9654;</button>
+    </div>
+  
+  </div>
+
+  <!-- <div>
+    <button class="btnBalloons" accesskey="plus">&#9687;</button>
+    <button class="btnBalloons" accesskey="minus">&#9686;</button>
+  </div> -->
+
+
+  <div id="container">
+    <canvas id="canvas">
+    </canvas>
+  </div>
+
+  <div id="portfolio">
+    <a href="https://konstantin84ukr.github.io/CV/">
+        <img class="icon" src="data:image/png;base64,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" alt="Portfolio">
+    </a>
+</div>
+
+</div>
+
+</body>
+</html>
